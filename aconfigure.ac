@@ -813,31 +813,16 @@ else
 	  AC_MSG_RESULT([Checking if OpenGL ES 2 is available... yes])
 	else
 	  AC_MSG_RESULT([Checking if OpenGL ES 2 is available... no])
-	fi
-	ac_android_cflags="$ac_android_cflags -DPJMEDIA_VIDEO_DEV_HAS_ANDROID=1"
+	fi	
 	AC_MSG_CHECKING([if Android MediaCodec is available])
-	AMEDIACODEC_LIBS="-lmediandk"
-	SAVED_LIBS="$LIBS"
-	SAVED_LDFLAGS="$LDFLAGS"
-	SAVED_CFLAGS="$CFLAGS"
-
-  	SAVED_EXT="$ac_ext"
-	ac_ext=cpp
-	LIBS="$AMEDIACODEC_LIBS $LIBS"
-	AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include "media/NdkMediaCodec.h"]],
-			    		  [AMediaCodec *medCodec = AMediaCodec_createDecoderByType("video/avc");])],
-			  [ac_pjmedia_has_amediacodec=yes
-			   ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=1"
-			   ac_anmed_ldflags=""
-			   AC_MSG_RESULT(yes)
-				 ],
-			  [
-				  LIBS="$SAVED_LIBS"
-					LDFLAGS="$SAVED_LDFLAGS"
-					CFLAGS="$SAVED_CFLAGS"
-				  AC_MSG_RESULT(no)
-				])
-	ac_ext="$SAVED_EXT"
+	AC_CHECK_LIB(mediandk,AMediaCodec_createDecoderByType,[ac_pjmedia_has_amediacodec=1 && LIBS="-lmediandk $LIBS"])
+	if test "x$ac_pjmedia_has_amediacodec" = "x1" then
+		AC_MSG_RESULT([Android AMediaCodec library found, AMediaCodec support enabled])
+		ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=1"
+	else
+		AC_MSG_RESULT([Android AMediaCodec library not found, AMediaCodec support disabled])
+		ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=0"
+	fi
 	;;
   *darwin*)
 	ac_pjmedia_video=darwin_os
