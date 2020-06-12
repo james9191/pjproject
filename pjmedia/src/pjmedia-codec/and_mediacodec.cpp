@@ -22,10 +22,6 @@
 #include <pjmedia/errno.h>
 #include <pj/log.h>
 
-#if !defined(PJMEDIA_HAS_ANDROID_MEDIACODEC) || PJMEDIA_HAS_ANDROID_MEDIACODEC == 0
-  fasfa;
-#endif
-
 #if defined(PJMEDIA_HAS_ANDROID_MEDIACODEC) && \
             PJMEDIA_HAS_ANDROID_MEDIACODEC != 0 && \
     defined(PJMEDIA_HAS_VIDEO) && (PJMEDIA_HAS_VIDEO != 0)
