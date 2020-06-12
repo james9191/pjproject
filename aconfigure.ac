@@ -816,12 +816,12 @@ else
 	fi	
 	AC_MSG_CHECKING([if Android MediaCodec is available])
 	AC_CHECK_LIB(mediandk,AMediaCodec_createDecoderByType,[ac_pjmedia_has_amediacodec=1 && LIBS="-lmediandk $LIBS"])
-	if test "x$ac_pjmedia_has_amediacodec" = "x1" then
+	if test "x$ac_pjmedia_has_amediacodec" = "x1"; then
 		AC_MSG_RESULT([Android AMediaCodec library found, AMediaCodec support enabled])
-		ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=1"
+		[ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=1"]
 	else
 		AC_MSG_RESULT([Android AMediaCodec library not found, AMediaCodec support disabled])
-		ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=0"
+		[ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=0"]
 	fi
 	;;
   *darwin*)
