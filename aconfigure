@@ -681,6 +681,9 @@ ac_darwin_cflags
 ac_pjmedia_video_has_ios_opengl
 ac_pjmedia_video_has_vtoolbox
 ac_pjmedia_video_has_darwin
+ac_anmed_ldflags
+ac_anmed_cflags
+ac_pjmedia_has_amediacodec
 ac_android_cflags
 ac_pjmedia_video_has_android
 ac_pjmedia_video
@@ -6507,6 +6510,9 @@ else
 	ac_pjmedia_video=android_os
 
 
+
+
+
 	SAVED_LIBS="$LIBS"
 	LIBS="-lGLESv2 -lEGL -landroid -lgcc -lc"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -6538,6 +6544,46 @@ $as_echo "Checking if OpenGL ES 2 is available... yes" >&6; }
 $as_echo "Checking if OpenGL ES 2 is available... no" >&6; }
 	fi
 	ac_android_cflags="$ac_android_cflags -DPJMEDIA_VIDEO_DEV_HAS_ANDROID=1"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if Android MediaCodec is available" >&5
+$as_echo_n "checking if Android MediaCodec is available... " >&6; }
+	AMEDIACODEC_LIBS="-lmediandk"
+	SAVED_LIBS="$LIBS"
+	SAVED_LDFLAGS="$LDFLAGS"
+	SAVED_CFLAGS="$CFLAGS"
+
+  	SAVED_EXT="$ac_ext"
+	ac_ext=cpp
+	LIBS="$AMEDIACODEC_LIBS $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include "media/NdkMediaCodec.h"
+int
+main ()
+{
+AMediaCodec *medCodec = AMediaCodec_createDecoderByType("video/avc");
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_pjmedia_has_amediacodec=yes
+			   ac_anmed_cflags="-DPJMEDIA_HAS_ANDROID_MEDIACODEC=1"
+			   ac_anmed_ldflags=""
+			   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+
+else
+
+				  LIBS="$SAVED_LIBS"
+					LDFLAGS="$SAVED_LDFLAGS"
+					CFLAGS="$SAVED_CFLAGS"
+				  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	ac_ext="$SAVED_EXT"
 	;;
   *darwin*)
 	ac_pjmedia_video=darwin_os
@@ -10451,4 +10497,3 @@ Further customizations can be put in:
 
 The next step now is to run 'make dep' and 'make'.
 " >&6; }
-
